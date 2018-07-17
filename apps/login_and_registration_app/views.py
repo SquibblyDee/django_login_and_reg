@@ -1,3 +1,8 @@
+#############################TODO#########################################
+#Email - Required; Valid Format
+#Password - Required; No fewer than 8 characters in length; matches Password Confirmation
+#Error Messages
+############################################################################
 from django.shortcuts import render, redirect, HttpResponseRedirect
 from django.contrib import messages
 
