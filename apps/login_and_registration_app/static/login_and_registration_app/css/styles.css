@@ -12,6 +12,7 @@ button{
     float: right;
     box-shadow: 2px 2px black;
     margin-bottom: 10% !important;
+    border-radius: 0px !important;
     
 }
 

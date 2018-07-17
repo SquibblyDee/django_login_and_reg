@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 from django.db import models
 from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 import re
 
 # Create your models here.
@@ -9,29 +10,28 @@ import re
 class UserManager(models.Manager):
     def basic_validator(self, postData):
         errors = {}
-        query = Users.objects.all().values('email')
+        #validate length of first name field
         if len(postData['input_first_name']) < 2:
             errors["input_first_name"] = "First name should be at least 2 letters"
-        for char in postData['input_first_name']:
-            if char.isalpha() == False:
-                errors["input_first_name"] = "First name cannot contain numbers"
+        #validate first name field doesn't contain numbers
+        if postData['input_first_name'].isalpha() == False:
+            errors["input_first_name"] = "First name cannot contain numbers"
+        #validate length of last name field
         if len(postData['input_last_name']) < 2:
             errors["input_last_name"] = "Last name should be at least 2 letters"
-        for char in postData['input_last_name']:
-            if char.isalpha() == False:
-                errors["input_last_name"] = "Last name cannot contain numbers"
-        if "@" not in postData['input_email']:
-            errors["input_email"] = "Email needs to have an @"
+        #validate last name field doesn't contain numbers
+        if postData['input_last_name'].isalpha() == False:
+            errors["input_last_name"] = "Last name cannot contain numbers"
+        # query the list of all emails to verify the desired address is not registered yet
+        query = Users.objects.all().values('email')
         for row in query:
             for key in row:
                 if row[key] == postData['input_email']:
                     errors["input_email"] = "Email is taken"
-
+        # validate that the email supplied by the user is of a valid format
         try:
-            validate_email(postData["login_email"])
-            valid_email = True
-        except:
-            valid_email = False
+            validate_email(postData["input_email"])
+        except ValidationError:
             errors['input_email'] = "Enter a valid email"
 
         if len(postData['input_password']) < 8:
