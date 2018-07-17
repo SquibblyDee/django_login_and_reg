@@ -1,6 +1,5 @@
 from __future__ import unicode_literals
 from django.db import models
-from django.core.validators import RegexValidator
 import re
 
 # Create your models here.
@@ -9,6 +8,7 @@ import re
 class UserManager(models.Manager):
     def basic_validator(self, postData):
         errors = {}
+        query = Users.objects.all().values('email')
         if len(postData['input_first_name']) < 2:
             errors["input_first_name"] = "First name should be at least 2 letters"
         for char in postData['input_first_name']:
@@ -21,8 +21,11 @@ class UserManager(models.Manager):
                 errors["input_last_name"] = "Last name cannot contain numbers"
         if "@" not in postData['input_email']:
             errors["input_email"] = "Email needs to have an @"
-        if not re.match(r"[^@]+@[^@]+\.[^@]+", postData['login_email']):
-            errors["login_email"] = "Invalid email address"
+        for row in query:
+            for key in row:
+                print("KEYYYYY", row[key])
+                if row[key] == postData['input_email']:
+                    errors["input_email"] = "Email is taken"
         if len(postData['input_password']) < 8:
             errors["input_password"] = "Password should be at least 8 characters"
         if postData['input_confirm_password'] != postData["input_password"]:
