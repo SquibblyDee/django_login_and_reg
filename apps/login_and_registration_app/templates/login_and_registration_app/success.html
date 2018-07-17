@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+    <head>
+        <title>Login & Reg | Success</title>
+        <!-- linking a css style sheet -->
+        <link rel="stylesheet" href="{% static 'login_and_registration_app/css/styles.css' %}">
+        <!-- Linking Bootstrap -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    </head>
+    <body>
+        <div class="container">
+            <div class='heading'>
+                <h1>Success! Welcome, {{ request.session.welcomename }}</h1>
+                <h3>{{ request.session.welcomemessage }}</h3>
+            </div>
+        </div>
+    </body>
+</html>
