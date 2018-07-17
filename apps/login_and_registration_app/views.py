@@ -1,8 +1,3 @@
-#############################TODO#########################################
-#Email - Required; Valid Format
-#Password - Required; No fewer than 8 characters in length; matches Password Confirmation
-#Error Messages
-############################################################################
 from django.shortcuts import render, redirect, HttpResponseRedirect
 from django.contrib import messages
 
@@ -27,7 +22,8 @@ def process_register(request, methods=['POST']):
         return redirect('/', id)
     else:
         # if the errors object is empty, that means there were no errors!
-        # add our new record to the table and redirect to /success to render our final page
+        # add our new record to the table , push what we need to session,
+        # and redirect to /success to render our final page
         Users.objects.create(first_name=request.POST['input_first_name'], last_name=request.POST['input_last_name'], email=request.POST['input_email'], password=bcrypt.hashpw(request.POST['input_password'].encode('utf8'), bcrypt.gensalt()))
         request.session['isloggedin'] = True
         request.session['welcomename'] = request.POST['input_first_name']
@@ -35,10 +31,10 @@ def process_register(request, methods=['POST']):
         return redirect('/success')
 
 def process_login(request, methods=['POST']):
+    # Query the data we need
     query = Users.objects.all().values('email', 'first_name', 'password')
-    print(query)
+    # Iterate through query until we find user email then verify password is legit
     for row in query:
-        print(request.POST['login_password'])
         if row['email'] == request.POST['login_email'] and bcrypt.checkpw(request.POST['login_password'].encode(), row['password'].encode()): 
             request.session['isloggedin'] = True
             request.session['welcomename'] = row['first_name']
@@ -47,8 +43,8 @@ def process_login(request, methods=['POST']):
     return redirect('/')
 
 def success(request):
-    if 'isloggedin' in request.session:
+    # If the user has a isLoggedin session 
+    if 'isloggedin' in request.session and request.session['isloggedin'] == True:
         return render(request, 'login_and_registration_app/success.html')
     else:
-        request.session['error'] = 'That combo is not valid'
         return redirect('/')

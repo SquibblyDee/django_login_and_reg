@@ -18,5 +18,6 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    #This handles all of our project level routing
     url(r'^', include('apps.login_and_registration_app.urls')),
 ]

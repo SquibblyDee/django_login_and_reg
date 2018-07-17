@@ -12,8 +12,10 @@
         <div class="container">
             <h1 class="heading">Registration</h1>
             <div class="registration">
+                <!-- This is the registration form to /process_register -->
                 <form action="/process_register" , method='post'>
                     {% csrf_token %}
+                    <!-- Displays error messages if any exist -->
                     {% if messages %}
                         <ul class="messages">
                             {% for message in messages %}
@@ -44,6 +46,7 @@
                     <button type="submit" class="btn btn-primary">Register</button>
                 </form>
             </div>
+            <!-- This is the login form to /process_login -->
             <div class="login">
                 <h1>Login here!</h1>
                 <form action='/process_login' , method='post'>
@@ -59,7 +62,6 @@
                     <button type="submit" class="btn btn-primary">Login</button>
                 </form>
             </div>
-            
         </div>
     </body>
 </html>
