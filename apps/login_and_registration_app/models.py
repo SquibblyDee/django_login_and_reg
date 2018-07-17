@@ -9,9 +9,15 @@ class UserManager(models.Manager):
     def basic_validator(self, postData):
         errors = {}
         if len(postData['input_first_name']) < 2:
-            errors["input_first_name"] = "First name should be at least 2 characters"
+            errors["input_first_name"] = "First name should be at least 2 letters"
+        for char in postData['input_first_name']:
+            if char.isalpha() == False:
+                errors["input_first_name"] = "First name cannot contain numbers"
         if len(postData['input_last_name']) < 2:
-            errors["input_last_name"] = "Last name should be at least 2 characters"
+            errors["input_last_name"] = "Last name should be at least 2 letters"
+        for char in postData['input_last_name']:
+            if char.isalpha() == False:
+                errors["input_last_name"] = "Last name cannot contain numbers"
         if "@" not in postData['input_email']:
             errors["input_email"] = "Email needs to have an @"
         if len(postData['input_password']) < 8:
