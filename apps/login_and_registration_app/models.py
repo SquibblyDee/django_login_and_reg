@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 from django.db import models
+from django.core.validators import validate_email
 import re
 
 # Create your models here.
@@ -23,9 +24,16 @@ class UserManager(models.Manager):
             errors["input_email"] = "Email needs to have an @"
         for row in query:
             for key in row:
-                print("KEYYYYY", row[key])
                 if row[key] == postData['input_email']:
                     errors["input_email"] = "Email is taken"
+
+        try:
+            validate_email(postData["login_email"])
+            valid_email = True
+        except:
+            valid_email = False
+            errors['input_email'] = "Enter a valid email"
+
         if len(postData['input_password']) < 8:
             errors["input_password"] = "Password should be at least 8 characters"
         if postData['input_confirm_password'] != postData["input_password"]:
