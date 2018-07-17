@@ -1,11 +1,12 @@
 from __future__ import unicode_literals
 from django.db import models
+from django.core.validators import RegexValidator
+
 # Create your models here.
 
 # This class handles all of the validation for our forms on submit
 class UserManager(models.Manager):
     def basic_validator(self, postData):
-        print("IN DAT VALIDATOR")
         errors = {}
         if len(postData['input_first_name']) < 2:
             errors["input_first_name"] = "First name should be at least 2 characters"
