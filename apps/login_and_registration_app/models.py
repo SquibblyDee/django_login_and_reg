@@ -6,7 +6,7 @@ import re
 
 # Create your models here.
 
-# This class handles all of the validation for our forms on submit
+# This class handles all of the validation for our registration form on submit
 class UserManager(models.Manager):
     def register_validator(self, postData):
         errors = {}
@@ -40,6 +40,7 @@ class UserManager(models.Manager):
             errors["input_confirm_password"] = "Passwords must match"
         return errors
 
+#This class validates all the login form field's lengths on submit
     def login_validator(self, postData):
         login_errors = {}
         #validate length of both fields field
