@@ -8,7 +8,7 @@ import re
 
 # This class handles all of the validation for our forms on submit
 class UserManager(models.Manager):
-    def basic_validator(self, postData):
+    def register_validator(self, postData):
         errors = {}
         #validate length of first name field
         if len(postData['input_first_name']) < 2:
@@ -23,7 +23,7 @@ class UserManager(models.Manager):
         if postData['input_last_name'].isalpha() == False:
             errors["input_last_name"] = "Last name cannot contain numbers"
         # query the list of all emails to verify the desired address is not registered yet
-        query = Users.objects.all().values('email')
+        query = User.objects.all().values('email')
         for row in query:
             for key in row:
                 if row[key] == postData['input_email']:
@@ -40,8 +40,17 @@ class UserManager(models.Manager):
             errors["input_confirm_password"] = "Passwords must match"
         return errors
 
+    def login_validator(self, postData):
+        errors = {}
+        #validate length of first name field
+        if len(postData['login_email']) < 1:
+            errors["login_email"] = "Field cannot be empty!"
+        if len(postData['login_password']) < 1:
+            errors["login_password"] = "Field cannot be empty!"
+        return errors
+
 # This is our table
-class Users(models.Model):
+class User(models.Model):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     email = models.CharField(max_length=255)
