@@ -32,17 +32,27 @@ def process_register(request, methods=['POST']):
         return redirect('/success')
 
 def process_login(request, methods=['POST']):
+    #check for errors returned by our login_validator
+    login_errors = User.objects.login_validator(request.POST)
+    if len(login_errors):
+        for key, value in login_errors.items():
+            messages.error(request, value)
+            print("WEVE HIT AN ERROR")
+        # redirect the user back to the form to fix the errors
+        return redirect('/', id)
+    else:
     # Query the data we need
-    query = User.objects.all().values('id', 'email', 'first_name', 'password')
-    # Iterate through query until we find user email then verify password is legit
-    for row in query:
-        if row['email'] == request.POST['login_email'] and bcrypt.checkpw(request.POST['login_password'].encode(), row['password'].encode()): 
-            request.session['isloggedin'] = True
-            request.session['user_id'] = row['id']
-            request.session['welcomename'] = row['first_name']
-            request.session['welcomemessage'] = 'Successfully logged in!'
-            return redirect('/success')
-    return redirect('/')
+        query = User.objects.all().values('id', 'email', 'first_name', 'password')
+        # Iterate through query until we find user email then verify password is legit
+        for row in query:
+            if row['email'] == request.POST['login_email'] and bcrypt.checkpw(request.POST['login_password'].encode(), row['password'].encode()): 
+                request.session['isloggedin'] = True
+                request.session['user_id'] = row['id']
+                request.session['welcomename'] = row['first_name']
+                request.session['welcomemessage'] = 'Successfully logged in!'
+                return redirect('/success')
+    
+    #return redirect('/')
 
 def success(request):
     # If the user has a isLoggedin session 

@@ -51,6 +51,13 @@
                 <h1>Logins</h1>
                 <form action='/process_login' , method='post'>
                     {% csrf_token %}
+                    {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                                <li{% if message.tags  %} style="color: red" class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                     <div class="form-group">
                         <label for="login_email">Email:</label>
                         <input type="email" name="login_email" class="form-control" id="login_email" placeholder="Enter email">

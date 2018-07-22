@@ -41,13 +41,11 @@ class UserManager(models.Manager):
         return errors
 
     def login_validator(self, postData):
-        errors = {}
-        #validate length of first name field
-        if len(postData['login_email']) < 1:
-            errors["login_email"] = "Field cannot be empty!"
-        if len(postData['login_password']) < 1:
-            errors["login_password"] = "Field cannot be empty!"
-        return errors
+        login_errors = {}
+        #validate length of both fields field
+        if len(postData['login_email']) < 1 or len(postData['login_password']) < 1:
+            login_errors["login_email"] = "Field cannot be empty!"
+        return login_errors
 
 # This is our table
 class User(models.Model):
